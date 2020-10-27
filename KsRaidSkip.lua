@@ -141,9 +141,9 @@ function addon:OnInitialize()
 		quests = {},
 	}
 
-	--self:RegisterEvent("QUEST_COMPLETE", "UpdateInfo_QC")
+
 	self:RegisterEvent("QUEST_TURNED_IN", "UpdateInfo_QTI")
-	--self:RegisterEvent("ZONE_CHANGED", "UpdateInfo_ZC")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateInfo_Load")
 
 	self:UpdateInfo()
 	self:MainUpdate()
@@ -217,6 +217,12 @@ function addon:UpdateInfo_QTI(event, questID)
 --		print(MODNAME.." - not our quest ")
 	end
 end
+
+function addon:UpdateInfo_Load()
+	-- update on loading screen (any cause), to be sure
+	self:UpdateInfo()
+end
+
 
 
 function addon:UpdateInfo()
