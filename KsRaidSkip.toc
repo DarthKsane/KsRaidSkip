@@ -1,6 +1,6 @@
 ## Interface: 90001
-## Title: Sample LDB addon
-## Notes: Sample LDB addon for learning purposes.
+## Title: Raid-skip tracking
+## Notes: Addon for tracking raid-skip quests
 ## Version: 1.1
 ## Author: DarthKsane
 ## OptionalDeps: Ace3, LibDataBroker-1.1
