@@ -4,6 +4,6 @@ if not L then return end
 
 L["Localization test"] = "Localization test"
 L["Main text"] = "Main text"
-L["Mythic"] = "Mythic"
-L["Heroic"] = "Heroic"
-L["Normal"] = "Normal"
+L["Mythic"] = PLAYER_DIFFICULTY6 -- autolocalized "Mythic"
+L["Heroic"] = PLAYER_DIFFICULTY2 -- autolocalized "Heroic"
+L["Normal"] = PLAYER_DIFFICULTY1 -- autolocalized "Normal"
