@@ -2,10 +2,12 @@ local _G = getfenv(0)
 
 local MODNAME	= "KsRaidSkip"
 local addon = LibStub("AceAddon-3.0"):NewAddon(MODNAME, "AceEvent-3.0")
-_G.Broker_ReoriginationArray = addon
+
 
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local L = LibStub("AceLocale-3.0"):GetLocale(MODNAME)
+--local addonName, addon = ...
+--local L = addon.L
 
 local ICON_DONE = "|TInterface\\RaidFrame\\ReadyCheck-Ready:0|t"
 local ICON_NOTDONE = "|TInterface\\RaidFrame\\ReadyCheck-NotReady:0|t"
@@ -18,6 +20,11 @@ local q_status_icon = {
 
 local stored_quest_statuses = {}
 local mythic_done_count = {}
+
+local function showConfig()
+  InterfaceOptionsFrame_OpenToCategory(MODNAME)
+  InterfaceOptionsFrame_OpenToCategory(MODNAME)
+end
 
 local function normal(text)
   if not text then return "" end
@@ -177,12 +184,23 @@ addon.obj = ldb:NewDataObject(MODNAME, {
 				local raidinfo = GetRealZoneText(theraid.raidid)
 
 				tooltip:AddLine(highlight(raidinfo))
+				local highdone = {[1]=0,[2]=0}
 				for k,rdif in ipairs(theraid.rqs) do
 					--print("    ", k,rdif.dif)
 					--tooltip:AddLine(rdif.dif)
 					for l,thequest in ipairs(rdif.qs) do
 						--print("      ", l,thequest.id, thequest.boss)
-						tooltip:AddDoubleLine("["..L[rdif.dif].."] "..fmt_quest(thequest.id), fmt_boss(thequest.boss))
+						
+						if highdone[l] < 2 then
+							-- если квест выше сложностью не сдела, значит квест текущей сложности - самый топ
+							-- значит, сохраняем статус квеста текущей сложности
+							highdone[l] = stored_quest_statuses[thequest.id]
+							tooltip:AddDoubleLine("["..L[rdif.dif].."] "..fmt_quest(thequest.id), fmt_boss(thequest.boss))
+						else
+							-- если квест выше сложностью сделан, значит квест текущей сложности не нужен
+							--tooltip:AddLine("NOT NEEDED")
+							tooltip:AddDoubleLine(muted("["..L[rdif.dif].."] "..fmt_quest(thequest.id)), fmt_boss(thequest.boss))
+						end
 						--tooltip:AddLine("["..L[rdif.dif].."] ")
 						--tooltip:AddLine(fmt_quest(thequest.id))
 					end
@@ -198,6 +216,13 @@ addon.obj = ldb:NewDataObject(MODNAME, {
 
 
 	end,
+	OnClick = function(self, button)
+      if button == "RightButton" then
+        showConfig()
+--      else
+--        ToggleCharacter("TokenFrame");
+      end
+    end,
 })
 
 

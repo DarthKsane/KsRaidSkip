@@ -17,3 +17,4 @@ locales\ruRU.lua
 
 KsQuestList.lua
 KsRaidSkip.lua
+config.lua
