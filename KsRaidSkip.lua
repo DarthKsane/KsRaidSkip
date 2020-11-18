@@ -177,12 +177,23 @@ addon.obj = ldb:NewDataObject(MODNAME, {
 				local raidinfo = GetRealZoneText(theraid.raidid)
 
 				tooltip:AddLine(highlight(raidinfo))
+				local highdone = {[1]=0,[2]=0}
 				for k,rdif in ipairs(theraid.rqs) do
 					--print("    ", k,rdif.dif)
 					--tooltip:AddLine(rdif.dif)
 					for l,thequest in ipairs(rdif.qs) do
 						--print("      ", l,thequest.id, thequest.boss)
-						tooltip:AddDoubleLine("["..L[rdif.dif].."] "..fmt_quest(thequest.id), fmt_boss(thequest.boss))
+						
+						if highdone[l] < 2 then
+							-- если квест выше сложностью не сдела, значит квест текущей сложности - самый топ
+							-- значит, сохраняем статус квеста текущей сложности
+							highdone[l] = stored_quest_statuses[thequest.id]
+							tooltip:AddDoubleLine("["..L[rdif.dif].."] "..fmt_quest(thequest.id), fmt_boss(thequest.boss))
+						else
+							-- если квест выше сложностью сделан, значит квест текущей сложности не нужен
+							--tooltip:AddLine("NOT NEEDED")
+							tooltip:AddDoubleLine(muted("["..L[rdif.dif].."] "..fmt_quest(thequest.id)), fmt_boss(thequest.boss))
+						end
 						--tooltip:AddLine("["..L[rdif.dif].."] ")
 						--tooltip:AddLine(fmt_quest(thequest.id))
 					end
